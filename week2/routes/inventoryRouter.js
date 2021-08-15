@@ -1,4 +1,5 @@
 const express = require('express')
+const inventory = require('./models/inventory')
 const inventoryRouter = express.Router()
 const Inventory = require('./models/inventory')
 
@@ -12,17 +13,6 @@ inventoryRouter.get("/", (req, res, next) => {
     })
 })
 
-inventoryRouter.get("/:inventoryId", (req, res, next) => {
-    const inventoryId = req.params.inventoryId
-    const foundInventory = inventory.find(items => items._id === inventoryId)
-    if(!foundInventory){
-        const error = new Error(`The item with id ${inventoryId} was not found.`)
-        res.status(500)
-        return next(error)
-    }
-    return res.status(200).send(foundInventory)
-})
-
 inventoryRouter.post("/", (req, res, next) => {
     const newItem = new Inventory(req.body)
     newItem.save((err, savedInventory) => {
@@ -31,6 +21,20 @@ inventoryRouter.post("/", (req, res, next) => {
             return next(err)
         }
         return res.status(201).send(savedInventory)
+    })
+})
+
+// get one
+inventoryRouter.get("/:inventoryId", (req, res, next) => {
+    const inventoryId = req.params.inventoryId
+    Inventory.find({_id: inventoryId}, (err, docs) => {
+        if(err) {
+            const error = new Error(`The item with id ${inventoryId} was not found.`)
+            res.status(500)
+            return next(error)
+        } else {
+            res.status(200).send(docs);
+        }
     })
 })
 
