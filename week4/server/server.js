@@ -20,7 +20,7 @@ mongoose.connect('mongodb://localhost:27017/rockTheVotedb',
 
 
 app.use("/auth", require("./routes/authRouter"))
-app.use('/api', expressJwt({ secret: process.env.SECRET}))
+app.use('/api', expressJwt({ secret: process.env.SECRET, algorithms: ['HS256']}))
 
 app.use("/comment", require("./routes/commentRouter"))
 app.use("/issue", require("./routes/issueRouter"))

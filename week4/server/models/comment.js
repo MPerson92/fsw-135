@@ -12,19 +12,19 @@ const commentSchema = new Schema ({
         ref: "Issue",
         required: true
     },
-    parent_comment: {
-        type: Schema.Types.ObjectId,
-        ref: "Comment",
-        required: false
-    },
+    // parent_comment: {  
+    //     type: Schema.Types.ObjectId,
+    //     ref: "Comment",
+    //     required: false
+    // },
     comment_txt: {
         type: String,
         required: true
-    },
-    insert_date: {
-        type: Date,
-        default: Date.now
     }
+    // insert_date: {
+    //     type: Date,
+    //     default: Date.now
+    // }
 })
 
 module.exports = mongoose.model('Comment', commentSchema)

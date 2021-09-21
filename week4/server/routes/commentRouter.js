@@ -12,6 +12,23 @@ commentRouter.get("/", (req, res, next) => {
     })
 })
 
+commentRouter.post("/:issueId", (req, res, next) => {
+    //req.body.user = req.user._id
+    //req.username = req.user.username
+
+    //console.log('req.params: ', req.params)
+
+    req.body.issue = req.params.issueId
+    const newComment = new Comment(req.body)
+    newComment.save((err, savedComment) => {
+        if(err){
+            res.status(500)
+            return next(err)
+        }
+        return res.status(201).send(savedComment)
+    })
+})
+
 commentRouter.get("/:userId", (req, res, next) => {
     Comment.find({user: req.params.userId}, (err, docs) =>{
         if(err) {
@@ -24,25 +41,15 @@ commentRouter.get("/:userId", (req, res, next) => {
 })
 
 commentRouter.get("/:commentId", (req, res, next) => {
-    Comment.find({_id: req.params.commentId}, (err, docs) =>{
+    const commentId = req.params.commentId
+    Comment.find({_id: commentId}, (err, docs) =>{
         if(err) {
             const error = new Error(`The Comment with ID ${commentId} was not found.`)
             res.status(500)
             return next(error)
-        } return res.status(200).send(docs)
-    })
-})
-
-commentRouter.post("/", (req, res, next) => {
-    req.body.user = req.user._id
-    req.username = req.user.username
-    const newComment = new Comment(req.body)
-    newComment.save((err, savedComment) => {
-        if(err){
-            res.status(500)
-            return next(err)
+        } else {
+            res.status(200).send(docs)
         }
-        return res.status(201).send(savedComment)
     })
 })
 
